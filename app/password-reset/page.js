@@ -1,8 +1,9 @@
 'use client'
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
+import Link from 'next/link'
 
-export default function ResetPassword() {
+function ResetPasswordForm() {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -36,7 +37,7 @@ export default function ResetPassword() {
       {/* Header */}
       <div className="flex items-center justify-between px-8 py-4 bg-[#002D72]">
         <div className="text-white font-bold text-lg">MDS AVIS MASTER</div>
-        <a href="/" className="text-white text-sm hover:underline">Retour à l'accueil</a>
+        <Link href="/" className="text-white text-sm hover:underline">Retour à l'accueil</Link>
       </div>
 
       <div className="flex flex-1 items-center justify-center p-6">
@@ -69,10 +70,18 @@ export default function ResetPassword() {
           </form>
           
           <div className="text-center mt-6">
-            <a href="/login" className="text-[#002D72] font-semibold hover:underline text-sm">Retour à la connexion</a>
+            <Link href="/login" className="text-[#002D72] font-semibold hover:underline text-sm">Retour à la connexion</Link>
           </div>
         </div>
       </div>
     </div>
+  )
+}
+
+export default function ResetPassword() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Chargement...</div>}>
+      <ResetPasswordForm />
+    </Suspense>
   )
 }
