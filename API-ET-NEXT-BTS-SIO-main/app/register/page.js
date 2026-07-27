@@ -27,45 +27,59 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a1a] flex flex-col">
-      <div className="flex items-center justify-between px-6 py-4">
-        <div className="text-white font-bold text-lg">MY DIGITAL SCHOOL</div>
-        <button className="text-white text-sm">Retour a l'accueil</button>
+    <div className="min-h-screen bg-[#f8fbff] flex flex-col">
+      {/* Header */}
+      <div className="flex items-center justify-between px-6 py-4 bg-[#002D72]">
+        <div className="text-white font-bold text-lg">MDS AVIS MASTER</div>
+        <a href="/" className="text-white text-sm hover:underline">Retour à l'accueil</a>
       </div>
+
       <div className="flex flex-col md:flex-row flex-1">
-        <div className="hidden md:flex w-1/2 items-center justify-center">
-          <img src="/image-register.png" alt="register" className="max-w-md w-full" />
+        {/* Image / Branding */}
+        <div className="hidden md:flex w-1/2 items-center justify-center bg-[#002D72]">
+           <div className="text-white text-center p-10">
+              <h2 className="text-4xl font-bold mb-4">Rejoignez la communauté</h2>
+              <p>Partagez vos avis et progressez ensemble.</p>
+           </div>
         </div>
+
+        {/* Formulaire */}
         <div className="w-full md:w-1/2 flex flex-col justify-center px-6 md:px-16 py-8">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">Créer votre compte</h1>
-          <p className="text-gray-400 mb-8 text-sm">Tu cherches une école du digital en France ? Découvre les formations MyDigitalSchool dans nos 17 campus</p>
+          <h1 className="text-4xl font-bold text-[#002D72] mb-2">Créer votre compte</h1>
+          <p className="text-gray-600 mb-8 text-sm">Inscrivez-vous pour accéder à la plateforme MDS AVIS MASTER.</p>
+          
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-white text-sm mb-2">Nom complet</label>
-              <input type="text" placeholder="Entrez votre nom" onChange={(e) => setName(e.target.value)} className="w-full bg-[#1a1a2e] text-white px-4 py-3 rounded-lg border border-gray-700 focus:outline-none focus:border-indigo-500" />
+              <label className="block text-[#002D72] text-sm mb-2">Nom complet</label>
+              <input type="text" placeholder="Entrez votre nom" onChange={(e) => setName(e.target.value)} 
+                className="w-full bg-white text-[#002D72] px-4 py-3 rounded-lg border border-[#002D72] focus:outline-none focus:ring-2 focus:ring-[#002D72]" />
             </div>
             <div>
-              <label className="block text-white text-sm mb-2">Email</label>
-              <input type="email" placeholder="Entrez votre mail" onChange={(e) => setEmail(e.target.value)} className="w-full bg-[#1a1a2e] text-white px-4 py-3 rounded-lg border border-gray-700 focus:outline-none focus:border-indigo-500" />
+              <label className="block text-[#002D72] text-sm mb-2">Email</label>
+              <input type="email" placeholder="Entrez votre mail" onChange={(e) => setEmail(e.target.value)} 
+                className="w-full bg-white text-[#002D72] px-4 py-3 rounded-lg border border-[#002D72] focus:outline-none focus:ring-2 focus:ring-[#002D72]" />
             </div>
             <div>
-              <label className="block text-white text-sm mb-2">Mot de passe</label>
+              <label className="block text-[#002D72] text-sm mb-2">Mot de passe</label>
               <div className="relative">
-                <input type={showPassword ? 'text' : 'password'} placeholder="Créez un mot de passe" onChange={(e) => setPassword(e.target.value)} className="w-full bg-[#1a1a2e] text-white px-4 py-3 rounded-lg border border-gray-700 focus:outline-none focus:border-indigo-500" />
-                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-3 text-gray-400">👁</button>
+                <input type={showPassword ? 'text' : 'password'} placeholder="Créez un mot de passe" onChange={(e) => setPassword(e.target.value)} 
+                  className="w-full bg-white text-[#002D72] px-4 py-3 rounded-lg border border-[#002D72] focus:outline-none focus:ring-2 focus:ring-[#002D72]" />
+                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-3 text-[#002D72]">👁</button>
               </div>
             </div>
             <div>
-              <label className="block text-white text-sm mb-2">Confirmer le mot de passe</label>
+              <label className="block text-[#002D72] text-sm mb-2">Confirmer le mot de passe</label>
               <div className="relative">
-                <input type={showConfirm ? 'text' : 'password'} placeholder="Confirmez votre mot de passe" onChange={(e) => setConfirmPassword(e.target.value)} className="w-full bg-[#1a1a2e] text-white px-4 py-3 rounded-lg border border-gray-700 focus:outline-none focus:border-indigo-500" />
-                <button type="button" onClick={() => setShowConfirm(!showConfirm)} className="absolute right-3 top-3 text-gray-400">👁</button>
+                <input type={showConfirm ? 'text' : 'password'} placeholder="Confirmez votre mot de passe" onChange={(e) => setConfirmPassword(e.target.value)} 
+                  className="w-full bg-white text-[#002D72] px-4 py-3 rounded-lg border border-[#002D72] focus:outline-none focus:ring-2 focus:ring-[#002D72]" />
+                <button type="button" onClick={() => setShowConfirm(!showConfirm)} className="absolute right-3 top-3 text-[#002D72]">👁</button>
               </div>
             </div>
-            <button type="submit" className="w-full bg-indigo-500 hover:bg-indigo-400 text-white font-semibold py-3 rounded-lg">S'inscrire</button>
+            <button type="submit" className="w-full bg-[#002D72] hover:bg-blue-900 text-white font-semibold py-3 rounded-lg transition">S'inscrire</button>
           </form>
-          <p className="text-gray-400 text-center mt-6 text-sm">
-            Déjà un compte ? <a href="/login" className="text-indigo-400 hover:text-indigo-300">Se connecter</a>
+          
+          <p className="text-gray-600 text-center mt-6 text-sm">
+            Déjà un compte ? <a href="/login" className="text-[#002D72] font-bold hover:underline">Se connecter</a>
           </p>
         </div>
       </div>

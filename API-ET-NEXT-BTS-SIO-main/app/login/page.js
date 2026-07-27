@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { Login } from '@/services/login'
+import { Login } from '@/app/services/login'
 import Toast from '@/components/toast'
 
 export default function LoginPage() {
@@ -31,40 +31,57 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a2e] flex flex-col">
+    <div className="min-h-screen bg-[#f8fbff] flex flex-col">
       {message && error && <Toast message={message} />}
-      <div className="flex items-center justify-between px-6 py-4">
-        <div className="text-white font-bold text-lg">MY DIGITAL SCHOOL</div>
-        <button className="text-white text-sm">Retour en arrière</button>
+      
+      {/* Header */}
+      <div className="flex items-center justify-between px-6 py-4 bg-[#002D72]">
+        <div className="text-white font-bold text-lg">MDS AVIS MASTER</div>
+        <a href="/" className="text-white text-sm hover:underline">Retour à l'accueil</a>
       </div>
+
       <div className="flex flex-col md:flex-row flex-1">
-        <div className="hidden md:flex w-1/2 items-center justify-center">
-          <img src="/image-login.png" alt="login" className="max-w-md w-full" />
+        {/* Branding */}
+        <div className="hidden md:flex w-1/2 items-center justify-center bg-[#002D72]">
+          <div className="text-white text-center p-10">
+            <h2 className="text-4xl font-bold mb-4">Content de vous revoir !</h2>
+            <p>Connectez-vous pour accéder à vos avis.</p>
+          </div>
         </div>
+
+        {/* Formulaire */}
         <div className="w-full md:w-1/2 flex flex-col justify-center px-6 md:px-16 py-8">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">Bienvenue!</h1>
-          <p className="text-indigo-400 mb-8">Connectez vous pour continuer</p>
+          <h1 className="text-4xl font-bold text-[#002D72] mb-2">Connexion</h1>
+          <p className="text-gray-600 mb-8">Connectez-vous pour continuer sur MDS AVIS MASTER</p>
+          
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-white text-sm mb-2">Email</label>
-              <input type="email" placeholder="Entrez votre mail" onChange={(e) => setEmail(e.target.value)} className="w-full bg-[#1a1a3e] text-white px-4 py-3 rounded-lg border border-gray-700 focus:outline-none focus:border-indigo-500" />
+              <label className="block text-[#002D72] text-sm mb-2">Email</label>
+              <input type="email" placeholder="Entrez votre mail" onChange={(e) => setEmail(e.target.value)} 
+                className="w-full bg-white text-[#002D72] px-4 py-3 rounded-lg border border-[#002D72] focus:outline-none focus:ring-2 focus:ring-[#002D72]" />
             </div>
             <div>
-              <label className="block text-white text-sm mb-2">Mot de passe</label>
+              <label className="block text-[#002D72] text-sm mb-2">Mot de passe</label>
               <div className="relative">
-                <input type={showPassword ? 'text' : 'password'} placeholder="Entrez votre mot de passe" onChange={(e) => setPassword(e.target.value)} className="w-full bg-[#1a1a3e] text-white px-4 py-3 rounded-lg border border-gray-700 focus:outline-none focus:border-indigo-500" />
-                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-3 text-gray-400">👁</button>
+                <input type={showPassword ? 'text' : 'password'} placeholder="Entrez votre mot de passe" onChange={(e) => setPassword(e.target.value)} 
+                  className="w-full bg-white text-[#002D72] px-4 py-3 rounded-lg border border-[#002D72] focus:outline-none focus:ring-2 focus:ring-[#002D72]" />
+                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-3 text-[#002D72]">👁</button>
               </div>
             </div>
-            <a href="/password-forgot" className="block text-indigo-400 hover:text-indigo-300 text-sm">Mot de passe oublier ?</a>
-            <div className="flex items-center gap-2">
-              <input type="checkbox" id="remember" className="w-4 h-4" />
-              <label htmlFor="remember" className="text-white text-sm">Se souvenir de moi</label>
+            
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-2">
+                <input type="checkbox" id="remember" className="accent-[#002D72]" />
+                <label htmlFor="remember" className="text-[#002D72] text-sm">Se souvenir de moi</label>
+              </div>
+              <a href="/password-forgot" className="text-[#002D72] text-sm hover:underline">Mot de passe oublié ?</a>
             </div>
-            <button type="submit" className="w-full bg-indigo-500 hover:bg-indigo-400 text-white font-semibold py-3 rounded-lg">Se connecter</button>
+            
+            <button type="submit" className="w-full bg-[#002D72] hover:bg-blue-900 text-white font-semibold py-3 rounded-lg transition">Se connecter</button>
           </form>
-          <p className="text-gray-400 text-center mt-6">
-            Pas de compte ? <a href="/register" className="text-indigo-400 hover:text-indigo-300">S'inscrire</a>
+          
+          <p className="text-gray-600 text-center mt-6">
+            Pas de compte ? <a href="/register" className="text-[#002D72] font-bold hover:underline">S'inscrire</a>
           </p>
         </div>
       </div>

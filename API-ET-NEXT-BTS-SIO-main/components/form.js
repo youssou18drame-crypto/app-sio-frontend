@@ -1,9 +1,7 @@
 'use client';
 import { useState } from 'react';
-import {Register } from '@/services/register';
 
 export default function RegisterPages() {
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -17,148 +15,78 @@ export default function RegisterPages() {
     setName(`${first} ${last}`);
   };
 
-  const GetEmail = (email) => {
-    setEmail(email);
-  };
-
-  const GetPassword = (password) => {
-    setPassword(password);
-  };
-
-  const GetConfirmPassword = (confirmPassword) => {
-    setConfirmPassword(confirmPassword);
-  };
-
-  const onSubmit = (e) => handleSubmit(e);
-
   async function handleSubmit(e) {
     e.preventDefault();
-
     if (password !== confirmPassword) {
-      console.log("Les mots de passe ne correspondent pas");
+      alert("Les mots de passe ne correspondent pas");
       return;
     }
             
     try {
-      const { response, result } = await Register({ username: name, email, password });
+      // Appel direct de ton API Backend sur le port 4000
+      const response = await fetch('http://localhost:4000/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: name, email, password })
+      });
+
+      const result = await response.json();
 
       if (response.ok) {
         localStorage.setItem('user', JSON.stringify(result.user));
         document.location.href = "/avis";
       } else {
-        console.log("Erreur lors de l'inscription", result.error);
+        alert("Erreur lors de l'inscription: " + (result.error || "Erreur inconnue"));
       }
     } catch (error) {
-      console.log("Erreur rÃ©seau", error);
+      console.log("Erreur réseau", error);
+      alert("Impossible de contacter le serveur. Vérifie que ton API est bien lancée sur le port 4000.");
     }
   }
+
   return (
-    <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+    <div className="flex min-h-screen flex-col justify-center px-6 py-12 bg-[#f8fbff]">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-white">
-          Create your account
+        <h2 className="mt-10 text-center text-2xl font-bold text-[#002D72]">
+          Créer votre compte étudiant
         </h2>
       </div>
-      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form onSubmit={onSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
+      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm bg-white p-8 rounded-xl shadow-lg border-t-4 border-[#002D72]">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
-              <label htmlFor="first-name" className="block text-sm/6 font-medium text-gray-100">
-                First name
-              </label>
-              <div className="mt-2">
-                <input
-                  id="first-name"
-                  name="first-name"
-                  type="text"
-                  required
-                  autoComplete="given-name"
-                  onChange={(e) => Getname(e.target.value, lastName)}
-                  className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
-                />
-              </div>
+              <label className="block text-sm font-medium text-[#002D72]">Prénom</label>
+              <input type="text" required onChange={(e) => Getname(e.target.value, lastName)}
+                className="block w-full rounded-md border border-[#002D72] px-3 py-1.5 text-[#002D72] outline-none focus:ring-2 focus:ring-[#002D72]" />
             </div>
             <div>
-              <label htmlFor="last-name" className="block text-sm/6 font-medium text-gray-100">
-                Last name
-              </label>
-              <div className="mt-2">
-                <input
-                  id="last-name"
-                  name="last-name"
-                  type="text"
-                  required
-                  autoComplete="family-name"
-                  onChange={(e) => Getname(firstName, e.target.value)}
-                  className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
-                />
-              </div>
+              <label className="block text-sm font-medium text-[#002D72]">Nom</label>
+              <input type="text" required onChange={(e) => Getname(firstName, e.target.value)}
+                className="block w-full rounded-md border border-[#002D72] px-3 py-1.5 text-[#002D72] outline-none focus:ring-2 focus:ring-[#002D72]" />
             </div>
           </div>
           <div>
-            <label htmlFor="email" className="block text-sm/6 font-medium text-gray-100">
-              Email address
-            </label>
-            <div className="mt-2">
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                autoComplete="email"
-                onChange={(e) => GetEmail(e.target.value)}
-                className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
-              />
-            </div>
+            <label className="block text-sm font-medium text-[#002D72]">Email</label>
+            <input type="email" required onChange={(e) => setEmail(e.target.value)}
+              className="block w-full rounded-md border border-[#002D72] px-3 py-1.5 text-[#002D72] outline-none focus:ring-2 focus:ring-[#002D72]" />
           </div>
           <div>
-            <label htmlFor="password" className="block text-sm/6 font-medium text-gray-100">
-              Password
-            </label>
-            <div className="mt-2">
-              <input
-                id="password"
-                name="password"
-                type="password"
-                required
-                autoComplete="new-password"
-                onChange={(e) => GetPassword(e.target.value)}
-                className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
-              />
-            </div>
+            <label className="block text-sm font-medium text-[#002D72]">Mot de passe</label>
+            <input type="password" required onChange={(e) => setPassword(e.target.value)}
+              className="block w-full rounded-md border border-[#002D72] px-3 py-1.5 text-[#002D72] outline-none focus:ring-2 focus:ring-[#002D72]" />
           </div>
           <div>
-            <label htmlFor="password-confirm" className="block text-sm/6 font-medium text-gray-100">
-              Confirm password
-            </label>
-            <div className="mt-2">
-              <input
-                id="password-confirm"
-                name="password-confirm"
-                type="password"
-                required
-                autoComplete="new-password"
-                onChange={(e) => GetConfirmPassword(e.target.value)}
-                className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
-              />
-            </div>
+            <label className="block text-sm font-medium text-[#002D72]">Confirmer mot de passe</label>
+            <input type="password" required onChange={(e) => setConfirmPassword(e.target.value)}
+              className="block w-full rounded-md border border-[#002D72] px-3 py-1.5 text-[#002D72] outline-none focus:ring-2 focus:ring-[#002D72]" />
           </div>
-
-          <div>
-            <button
-              type="submit"
-              className="flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
-            >
-              Sign up
-            </button>
-          </div>
+          <button type="submit"
+            className="flex w-full justify-center rounded-md bg-[#002D72] px-3 py-2 text-sm font-semibold text-white hover:bg-blue-900">
+            S'inscrire
+          </button>
         </form>
-
-        <p className="mt-10 text-center text-sm/6 text-gray-400">
-          Already have an account?{" "}
-          <a href="/login" className="font-semibold text-indigo-400 hover:text-indigo-300">
-            Sign in
-          </a>
+        <p className="mt-10 text-center text-sm text-gray-600">
+          Déjà un compte ? <a href="/login" className="font-semibold text-[#002D72] hover:underline">Se connecter</a>
         </p>
       </div>
     </div>

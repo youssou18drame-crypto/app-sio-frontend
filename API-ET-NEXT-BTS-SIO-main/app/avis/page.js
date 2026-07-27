@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
+import Link from 'next/link'
 
 export default function Avis() {
   const [avis, setAvis] = useState([])
@@ -7,84 +8,81 @@ export default function Avis() {
   const [description, setDescription] = useState('')
   const [rating, setRating] = useState(5)
   const [page, setPage] = useState('liste')
-  const [menuOpen, setMenuOpen] = useState(false)
+
+  // Fonction pour récupérer les avis depuis l'API
+  const fetchAvis = () => {
+    fetch('http://localhost:4000/avis')
+      .then(res => res.json())
+      .then(data => {
+        const result = data.reviews ? data.reviews : (Array.isArray(data) ? data : [])
+        setAvis(result)
+      })
+      .catch(err => console.error('Erreur:', err))
+  }
 
   useEffect(() => {
-    fetch('http://localhost:5000/avis')
-      .then(res => res.json())
-      .then(data => setAvis(data.reviews || []))
-      .catch(err => console.error('Erreur:', err))
+    fetchAvis()
   }, [])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      await fetch('http://localhost:5000/add/avis', {
+      const response = await fetch('http://localhost:4000/add/avis', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: titre, date: new Date().toISOString(), rating, description })
+        body: JSON.stringify({ 
+          title: titre, 
+          name: titre, 
+          date: new Date().toISOString(), 
+          rating, 
+          description 
+        })
       })
-      setPage('liste')
-      setMenuOpen(false)
+
+      if (response.ok) {
+        setTitre('')
+        setDescription('')
+        setRating(5)
+        fetchAvis()
+        setPage('liste')
+      } else {
+        console.error('Erreur lors de la publication')
+      }
     } catch (error) {
       console.error('Erreur:', error)
     }
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a1a] flex flex-col md:flex-row">
-      
-      {/* Sidebar desktop */}
-      <div className="hidden md:flex w-72 bg-[#0d0d1f] flex-col justify-between py-8 px-6">
+    <div className="min-h-screen bg-[#f8fbff] flex flex-col md:flex-row">
+      <div className="hidden md:flex w-72 bg-[#002D72] flex-col justify-between py-8 px-6 text-white">
         <div>
-          <div className="text-white font-bold text-lg mb-10">MY DIGITAL SCHOOL</div>
+          <div className="font-bold text-xl mb-10 tracking-wider">MDS AVIS MASTER</div>
           <nav className="space-y-2">
-            <button onClick={() => setPage('liste')} className="flex items-center gap-3 w-full px-4 py-3 rounded-lg text-white hover:bg-white/5">🏠 Accueil</button>
-            <button onClick={() => setPage('liste')} className="flex items-center gap-3 w-full px-4 py-3 rounded-lg text-white hover:bg-white/5">📬 Avis</button>
-            <button onClick={() => setPage('deposer')} className={`flex items-center gap-3 w-full px-4 py-3 rounded-lg text-white ${page === 'deposer' ? 'bg-indigo-500' : 'hover:bg-white/5'}`}>✏️ Déposer un avis</button>
+            <Link href="/" className="flex items-center gap-3 w-full px-4 py-3 rounded-lg hover:bg-white/10 transition">
+              🏠 Accueil
+            </Link>
+            <button onClick={() => setPage('liste')} className="flex items-center gap-3 w-full px-4 py-3 rounded-lg hover:bg-white/10 transition">📬 Avis</button>
+            <button onClick={() => setPage('deposer')} className={`flex items-center gap-3 w-full px-4 py-3 rounded-lg transition ${page === 'deposer' ? 'bg-white text-[#002D72] font-bold' : 'hover:bg-white/10'}`}>✏️ Déposer un avis</button>
           </nav>
         </div>
-        <div className="flex items-center gap-3 bg-[#1a1a2e] rounded-full px-4 py-2">
-          <div className="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center text-white">👤</div>
-          <div>
-            <div className="text-white text-sm font-medium">Mon profil</div>
-            <div className="text-gray-400 text-xs">Voir mon profil</div>
-          </div>
-        </div>
       </div>
 
-      {/* Navbar mobile */}
-      <div className="md:hidden bg-[#0d0d1f] px-6 py-4 flex items-center justify-between">
-        <div className="text-white font-bold">MY DIGITAL SCHOOL</div>
-        <button onClick={() => setMenuOpen(!menuOpen)} className="text-white text-2xl">☰</button>
-      </div>
-
-      {/* Menu mobile ouvert */}
-      {menuOpen && (
-        <div className="md:hidden bg-[#0d0d1f] px-6 py-4 space-y-2">
-          <button onClick={() => { setPage('liste'); setMenuOpen(false) }} className="flex items-center gap-3 w-full px-4 py-3 rounded-lg text-white hover:bg-white/5">🏠 Accueil</button>
-          <button onClick={() => { setPage('liste'); setMenuOpen(false) }} className="flex items-center gap-3 w-full px-4 py-3 rounded-lg text-white hover:bg-white/5">📬 Avis</button>
-          <button onClick={() => { setPage('deposer'); setMenuOpen(false) }} className="flex items-center gap-3 w-full px-4 py-3 rounded-lg text-white bg-indigo-500">✏️ Déposer un avis</button>
-        </div>
-      )}
-
-      {/* Contenu */}
       <div className="flex-1 p-6 md:p-12">
         {page === 'liste' ? (
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">Les avis</h1>
-            <p className="text-gray-400 mb-8">Découvrez les avis de nos étudiants</p>
+            <h1 className="text-3xl font-bold text-[#002D72] mb-2">Les derniers avis</h1>
             {avis.length === 0 ? (
-              <p className="text-gray-400">Aucun avis pour le moment.</p>
+              <p className="text-gray-500">Aucun avis pour le moment.</p>
             ) : (
               <div className="space-y-4">
-                {avis.map((a) => (
-                  <div key={a.id} className="bg-[#1a1a2e] rounded-lg p-6">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="font-semibold text-white">{a.name}</span>
-                      <span className="text-indigo-400">{'⭐'.repeat(a.rating)}</span>
+                {avis.map((a, index) => (
+                  <div key={index} className="bg-white border border-gray-100 shadow-sm rounded-xl p-6">
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="font-bold text-[#002D72]">{a.name || a.title}</span>
+                      <span className="text-yellow-500 text-lg">{'★'.repeat(a.rating || 0)}</span>
                     </div>
-                    <p className="text-gray-300">{a.description}</p>
+                    <p className="text-gray-700">{a.description}</p>
                   </div>
                 ))}
               </div>
@@ -92,27 +90,37 @@ export default function Avis() {
           </div>
         ) : (
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">Laisser un avis</h1>
-            <p className="text-gray-400 mb-8">Partagez votre expérience avec les autres.</p>
-            <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl">
+            <h1 className="text-3xl font-bold text-[#002D72] mb-2">Déposer un avis</h1>
+            <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl bg-white p-8 rounded-xl shadow-sm border border-gray-100">
               <div>
-                <label className="block text-white text-sm mb-2">Titre de l'avis</label>
-                <input type="text" placeholder="Ex : service au top !" onChange={(e) => setTitre(e.target.value)} className="w-full bg-[#1a1a2e] text-white px-4 py-3 rounded-lg border border-gray-700 focus:outline-none focus:border-indigo-500" />
+                <label className="block text-[#002D72] font-medium mb-2">Titre</label>
+                <input 
+                  type="text" 
+                  value={titre} 
+                  onChange={(e) => setTitre(e.target.value)} 
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#002D72] outline-none" 
+                  required 
+                />
               </div>
               <div>
-                <label className="block text-white text-sm mb-2">Votre avis</label>
-                <textarea placeholder="Décrivez votre expérience en détail..." rows={6} maxLength={1000} onChange={(e) => setDescription(e.target.value)} className="w-full bg-[#1a1a2e] text-white px-4 py-3 rounded-lg border border-gray-700 focus:outline-none focus:border-indigo-500 resize-none" />
-                <div className="text-right text-gray-400 text-sm">{description.length}/1000</div>
+                <label className="block text-[#002D72] font-medium mb-2">Votre message</label>
+                <textarea 
+                  rows={4} 
+                  value={description} 
+                  onChange={(e) => setDescription(e.target.value)} 
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#002D72] outline-none" 
+                  required 
+                />
               </div>
               <div>
-                <label className="block text-white text-sm mb-2">Votre note</label>
+                <label className="block text-[#002D72] font-medium mb-2">Note</label>
                 <div className="flex gap-2">
                   {[1,2,3,4,5].map((star) => (
-                    <button key={star} type="button" onClick={() => setRating(star)} className={`text-3xl ${star <= rating ? 'text-indigo-500' : 'text-gray-600'}`}>★</button>
+                    <button key={star} type="button" onClick={() => setRating(star)} className={`text-2xl ${star <= rating ? 'text-yellow-500' : 'text-gray-300'}`}>★</button>
                   ))}
                 </div>
               </div>
-              <button type="submit" className="w-full bg-indigo-500 hover:bg-indigo-400 text-white font-semibold py-3 rounded-lg">Publier mon avis</button>
+              <button type="submit" className="w-full bg-[#002D72] hover:bg-blue-900 text-white font-bold py-3 rounded-lg transition">Publier mon avis</button>
             </form>
           </div>
         )}

@@ -32,34 +32,44 @@ export default function ResetPassword() {
   }
 
   return (
-    <div className="min-h-screen bg-black flex flex-col">
-      <div className="flex items-center justify-between px-8 py-4">
-        <div className="text-white font-bold text-xl">MY DIGITAL SCHOOL</div>
-        <button className="text-white">Retour a l'accueil</button>
+    <div className="min-h-screen bg-[#f8fbff] flex flex-col">
+      {/* Header */}
+      <div className="flex items-center justify-between px-8 py-4 bg-[#002D72]">
+        <div className="text-white font-bold text-lg">MDS AVIS MASTER</div>
+        <a href="/" className="text-white text-sm hover:underline">Retour à l'accueil</a>
       </div>
-      <div className="flex flex-1 items-center justify-center">
-        <div className="bg-[#1a1a2e] rounded-2xl p-8 w-full max-w-md">
-          <h1 className="text-3xl font-bold text-white mb-2">Nouveau mot de passe</h1>
-          <p className="text-gray-400 mb-8">Choisissez un nouveau mot de passe sécurisé.</p>
+
+      <div className="flex flex-1 items-center justify-center p-6">
+        <div className="bg-white rounded-2xl p-8 w-full max-w-md shadow-lg border border-gray-100">
+          <h1 className="text-2xl font-bold text-[#002D72] mb-2">Nouveau mot de passe</h1>
+          <p className="text-gray-600 mb-8 text-sm">Choisissez un nouveau mot de passe sécurisé pour votre compte.</p>
+          
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-white text-sm mb-2">Nouveau mot de passe</label>
+              <label className="block text-[#002D72] text-sm font-medium mb-2">Nouveau mot de passe</label>
               <div className="relative">
-                <input type={showPassword ? 'text' : 'password'} placeholder="Créez un mot de passe" onChange={(e) => setPassword(e.target.value)} className="w-full bg-[#0a0a1a] text-white px-4 py-3 rounded-lg border border-indigo-500 focus:outline-none" />
-                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-3 text-gray-400">👁</button>
+                <input type={showPassword ? 'text' : 'password'} onChange={(e) => setPassword(e.target.value)} 
+                  className="w-full bg-white text-[#002D72] px-4 py-3 rounded-lg border border-[#002D72] focus:outline-none focus:ring-2 focus:ring-[#002D72]" />
+                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-3 text-[#002D72]">👁</button>
               </div>
             </div>
+            
             <div>
-              <label className="block text-white text-sm mb-2">Confirmer le mot de passe</label>
+              <label className="block text-[#002D72] text-sm font-medium mb-2">Confirmer le mot de passe</label>
               <div className="relative">
-                <input type={showConfirm ? 'text' : 'password'} placeholder="Confirmez votre mot de passe" onChange={(e) => setConfirmPassword(e.target.value)} className="w-full bg-[#0a0a1a] text-white px-4 py-3 rounded-lg border border-indigo-500 focus:outline-none" />
-                <button type="button" onClick={() => setShowConfirm(!showConfirm)} className="absolute right-3 top-3 text-gray-400">👁</button>
+                <input type={showConfirm ? 'text' : 'password'} onChange={(e) => setConfirmPassword(e.target.value)} 
+                  className="w-full bg-white text-[#002D72] px-4 py-3 rounded-lg border border-[#002D72] focus:outline-none focus:ring-2 focus:ring-[#002D72]" />
+                <button type="button" onClick={() => setShowConfirm(!showConfirm)} className="absolute right-3 top-3 text-[#002D72]">👁</button>
               </div>
             </div>
-            <button type="submit" className="w-full bg-indigo-500 hover:bg-indigo-400 text-white font-semibold py-3 rounded-lg">Réinitialiser</button>
+            
+            <button type="submit" className="w-full bg-[#002D72] hover:bg-blue-900 text-white font-semibold py-3 rounded-lg transition">
+              Réinitialiser
+            </button>
           </form>
-          <div className="text-center mt-4">
-            <a href="/login" className="text-indigo-400 hover:text-indigo-300 text-sm">Retour à la connexion</a>
+          
+          <div className="text-center mt-6">
+            <a href="/login" className="text-[#002D72] font-semibold hover:underline text-sm">Retour à la connexion</a>
           </div>
         </div>
       </div>
