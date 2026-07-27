@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import Link from 'next/link'
 import { Register } from '@/services/register'
 
 export default function RegisterPage() {
@@ -28,14 +29,12 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen bg-[#f8fbff] flex flex-col">
-      {/* Header */}
       <div className="flex items-center justify-between px-6 py-4 bg-[#002D72]">
         <div className="text-white font-bold text-lg">MDS AVIS MASTER</div>
-        <a href="/" className="text-white text-sm hover:underline">Retour à l'accueil</a>
+        <Link href="/" className="text-white text-sm hover:underline">Retour à l'accueil</Link>
       </div>
 
       <div className="flex flex-col md:flex-row flex-1">
-        {/* Image / Branding */}
         <div className="hidden md:flex w-1/2 items-center justify-center bg-[#002D72]">
            <div className="text-white text-center p-10">
               <h2 className="text-4xl font-bold mb-4">Rejoignez la communauté</h2>
@@ -43,7 +42,6 @@ export default function RegisterPage() {
            </div>
         </div>
 
-        {/* Formulaire */}
         <div className="w-full md:w-1/2 flex flex-col justify-center px-6 md:px-16 py-8">
           <h1 className="text-4xl font-bold text-[#002D72] mb-2">Créer votre compte</h1>
           <p className="text-gray-600 mb-8 text-sm">Inscrivez-vous pour accéder à la plateforme MDS AVIS MASTER.</p>
@@ -79,7 +77,7 @@ export default function RegisterPage() {
           </form>
           
           <p className="text-gray-600 text-center mt-6 text-sm">
-            Déjà un compte ? <a href="/login" className="text-[#002D72] font-bold hover:underline">Se connecter</a>
+            Déjà un compte ? <Link href="/login" className="text-[#002D72] font-bold hover:underline">Se connecter</Link>
           </p>
         </div>
       </div>
