@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { Register } from '@/services/register'
+import { Register } from '../../services/register'
 
 export default function RegisterPage() {
   const [email, setEmail] = useState('')
