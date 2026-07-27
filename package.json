@@ -5,14 +5,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.10",
     "@heroicons/react": "^2.2.0",
-    "@prisma/client": "^5.x.x",
     "cors": "^2.8.6",
     "next": "16.2.9",
     "react": "19.2.4",
@@ -22,7 +21,6 @@
     "@tailwindcss/postcss": "^4",
     "eslint": "^9",
     "eslint-config-next": "16.2.9",
-    "prisma": "^5.x.x",
     "tailwindcss": "^4"
   }
 }
