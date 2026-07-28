@@ -8,8 +8,8 @@ export default function Avis() {
   const [description, setDescription] = useState('')
   const [rating, setRating] = useState(5)
   const [page, setPage] = useState('liste')
+  const [estConnecte, setEstConnecte] = useState(false)
 
-  // Fonction pour récupérer les avis depuis l'API
   const fetchAvis = () => {
     fetch('http://localhost:4000/avis')
       .then(res => res.json())
@@ -22,10 +22,75 @@ export default function Avis() {
 
   useEffect(() => {
     fetchAvis()
+    const token = localStorage.getItem('token')
+    if (token) {
+      setEstConnecte(true)
+    } else {
+      setEstConnecte(false)
+    }
   }, [])
+
+  const handleLogout = () => {
+    localStorage.removeItem('token')
+    setEstConnecte(false)
+    window.location.reload()
+  }
+
+  const handleDelete = async (id) => {
+    if (!confirm("Voulez-vous vraiment supprimer cet avis ?")) return
+
+    const token = localStorage.getItem('token')
+
+    try {
+      const response = await fetch(`http://localhost:4000/avis/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+
+      if (response.ok) {
+        fetchAvis()
+      } else {
+        const errData = await response.json()
+        alert("Erreur : " + (errData.error || "Action non autorisée"))
+      }
+    } catch (error) {
+      console.error("Erreur réseau :", error)
+    }
+  }
+
+  // Fonction pour modifier un avis (sécurisée par token)
+  const handleEdit = async (id) => {
+    const nouveauTexte = prompt("Entrez la nouvelle description pour cet avis :")
+    if (!nouveauTexte) return
+
+    const token = localStorage.getItem('token')
+
+    try {
+      const response = await fetch(`http://localhost:4000/avis/${id}`, {
+        method: 'PUT', // ou 'PATCH' selon ton backend
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ description: nouveauTexte })
+      })
+
+      if (response.ok) {
+        fetchAvis()
+      } else {
+        const errData = await response.json()
+        alert("Erreur : " + (errData.error || "Action non autorisée"))
+      }
+    } catch (error) {
+      console.error("Erreur réseau :", error)
+    }
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+
     try {
       const response = await fetch('http://localhost:4000/add/avis', {
         method: 'POST',
@@ -46,10 +111,10 @@ export default function Avis() {
         fetchAvis()
         setPage('liste')
       } else {
-        console.error('Erreur lors de la publication')
+        console.error('Erreur du serveur')
       }
     } catch (error) {
-      console.error('Erreur:', error)
+      console.error('Erreur réseau :', error)
     }
   }
 
@@ -64,6 +129,15 @@ export default function Avis() {
             </Link>
             <button onClick={() => setPage('liste')} className="flex items-center gap-3 w-full px-4 py-3 rounded-lg hover:bg-white/10 transition">📬 Avis</button>
             <button onClick={() => setPage('deposer')} className={`flex items-center gap-3 w-full px-4 py-3 rounded-lg transition ${page === 'deposer' ? 'bg-white text-[#002D72] font-bold' : 'hover:bg-white/10'}`}>✏️ Déposer un avis</button>
+
+            {estConnecte && (
+              <button 
+                onClick={handleLogout} 
+                className="flex items-center gap-3 w-full px-4 py-3 rounded-lg text-red-300 hover:bg-white/10 transition mt-6 border border-red-400/30"
+              >
+                🚪 Se déconnecter
+              </button>
+            )}
           </nav>
         </div>
       </div>
@@ -76,13 +150,33 @@ export default function Avis() {
               <p className="text-gray-500">Aucun avis pour le moment.</p>
             ) : (
               <div className="space-y-4">
-                {avis.map((a, index) => (
-                  <div key={index} className="bg-white border border-gray-100 shadow-sm rounded-xl p-6">
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="font-bold text-[#002D72]">{a.name || a.title}</span>
-                      <span className="text-yellow-500 text-lg">{'★'.repeat(a.rating || 0)}</span>
+                {avis.map((a) => (
+                  <div key={a.id} className="bg-white border border-gray-100 shadow-sm rounded-xl p-6 flex justify-between items-start">
+                    <div>
+                      <div className="flex items-center gap-4 mb-3">
+                        <span className="font-bold text-[#002D72]">{a.name}</span>
+                        <span className="text-yellow-500 text-lg">{'★'.repeat(a.rating || 0)}</span>
+                      </div>
+                      <p className="text-gray-700">{a.description}</p>
                     </div>
-                    <p className="text-gray-700">{a.description}</p>
+                    
+                    {/* Actions restreintes aux utilisateurs connectés (Validation D4 et D5) */}
+                    {estConnecte && (
+                      <div className="flex gap-2">
+                        <button 
+                          onClick={() => handleEdit(a.id)} 
+                          className="text-blue-500 hover:text-blue-700 text-sm font-medium px-3 py-1 rounded border border-blue-200 hover:bg-blue-50 transition"
+                        >
+                          Modifier
+                        </button>
+                        <button 
+                          onClick={() => handleDelete(a.id)} 
+                          className="text-red-500 hover:text-red-700 text-sm font-medium px-3 py-1 rounded border border-red-200 hover:bg-red-50 transition"
+                        >
+                          Supprimer
+                        </button>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -93,7 +187,7 @@ export default function Avis() {
             <h1 className="text-3xl font-bold text-[#002D72] mb-2">Déposer un avis</h1>
             <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl bg-white p-8 rounded-xl shadow-sm border border-gray-100">
               <div>
-                <label className="block text-[#002D72] font-medium mb-2">Titre</label>
+                <label className="block text-[#002D72] font-medium mb-2">Titre / Nom</label>
                 <input 
                   type="text" 
                   value={titre} 
