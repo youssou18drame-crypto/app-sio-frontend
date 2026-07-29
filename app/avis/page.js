@@ -2,6 +2,8 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+
 export default function Avis() {
   const [avis, setAvis] = useState([])
   const [titre, setTitre] = useState('')
@@ -11,7 +13,7 @@ export default function Avis() {
   const [estConnecte, setEstConnecte] = useState(false)
 
   const fetchAvis = () => {
-    fetch('https://api-avis.vercel.app/avis')
+    fetch(`${API_URL}/avis`)
       .then(res => res.json())
       .then(data => {
         const result = data.reviews ? data.reviews : (Array.isArray(data) ? data : [])
@@ -42,7 +44,7 @@ export default function Avis() {
     const token = localStorage.getItem('token')
 
     try {
-      const response = await fetch(`https://api-avis.vercel.app/avis/${id}`, {
+      const response = await fetch(`${API_URL}/avis/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -67,7 +69,7 @@ export default function Avis() {
     const token = localStorage.getItem('token')
 
     try {
-      const response = await fetch(`https://api-avis.vercel.app/avis/${id}`, {
+      const response = await fetch(`${API_URL}/avis/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -91,7 +93,7 @@ export default function Avis() {
     e.preventDefault()
 
     try {
-      const response = await fetch('https://api-avis.vercel.app/add/avis', {
+      const response = await fetch(`${API_URL}/add/avis`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
