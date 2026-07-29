@@ -7,9 +7,9 @@ export async function Login(credentials) {
       },
       body: JSON.stringify(credentials),
     })
-    
+
     const result = await response.json()
-    return { response, result }
+    return { response, result } 
   } catch (error) {
     console.error("Erreur lors de la connexion :", error)
     throw error
