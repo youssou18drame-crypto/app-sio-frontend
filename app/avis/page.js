@@ -11,7 +11,7 @@ export default function Avis() {
   const [estConnecte, setEstConnecte] = useState(false)
 
   const fetchAvis = () => {
-    fetch('http://localhost:4000/avis')
+    fetch('https://api-avis.vercel.app/avis')
       .then(res => res.json())
       .then(data => {
         const result = data.reviews ? data.reviews : (Array.isArray(data) ? data : [])
@@ -42,7 +42,7 @@ export default function Avis() {
     const token = localStorage.getItem('token')
 
     try {
-      const response = await fetch(`http://localhost:4000/avis/${id}`, {
+      const response = await fetch(`https://api-avis.vercel.app/avis/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -60,7 +60,6 @@ export default function Avis() {
     }
   }
 
-  // Fonction pour modifier un avis (sécurisée par token)
   const handleEdit = async (id) => {
     const nouveauTexte = prompt("Entrez la nouvelle description pour cet avis :")
     if (!nouveauTexte) return
@@ -68,8 +67,8 @@ export default function Avis() {
     const token = localStorage.getItem('token')
 
     try {
-      const response = await fetch(`http://localhost:4000/avis/${id}`, {
-        method: 'PUT', // ou 'PATCH' selon ton backend
+      const response = await fetch(`https://api-avis.vercel.app/avis/${id}`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
@@ -92,7 +91,7 @@ export default function Avis() {
     e.preventDefault()
 
     try {
-      const response = await fetch('http://localhost:4000/add/avis', {
+      const response = await fetch('https://api-avis.vercel.app/add/avis', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
@@ -160,7 +159,6 @@ export default function Avis() {
                       <p className="text-gray-700">{a.description}</p>
                     </div>
                     
-                    {/* Actions restreintes aux utilisateurs connectés (Validation D4 et D5) */}
                     {estConnecte && (
                       <div className="flex gap-2">
                         <button 
