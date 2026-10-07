@@ -311,7 +311,14 @@ export default function Avis() {
 
                     {estConnecte && (
 
-                      <div>
+                      <div className="flex gap-4">
+
+                        <button
+                          onClick={()=>handleEdit(a.id)}
+                          className="text-[#002D72] font-medium"
+                        >
+                          Modifier
+                        </button>
 
                         <button
                           onClick={()=>handleDelete(a.id)}
